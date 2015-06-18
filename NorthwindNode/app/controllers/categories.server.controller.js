@@ -29,35 +29,42 @@ exports.create = function(req, res) {
  * Show the current Category
  */
 exports.read = function(req, res) {
-    Category.findById(req.params.categoryId).exec(function(err, category) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        }
-        else {
-            if (!category) {
-                return res.status(404).send({
-                    message: 'Category not found'
-                });
-            }
-            res.json(category);
-        }
-    });
+    res.json(req.category);
 };
 
 /**
  * Update a Category
  */
 exports.update = function(req, res) {
-
+    var category = req.category;
+    console.log(JSON.stringify(category));
+    category = _.extend(category, req.body);
+    console.log(JSON.stringify(category));
+    category.save(function(err){
+    	if(err){
+    		return res.status(400).send({
+    			message: errorHandler.getErrorMessage(err)
+    		});
+    	}
+    	else
+    		res.status(200).json(category);
+    });
 };
 
 /**
  * Delete an Category
  */
 exports.delete = function(req, res) {
-
+	var category = req.category;
+	category.remove(function(err){
+		if(err){
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}
+		else
+			res.status(200).json(category);
+	});
 };
 
 /**
@@ -72,5 +79,26 @@ exports.list = function(req, res) {
         }
         else
             res.json(categories);
+    });
+};
+
+/**
+ * Category Middleware
+ */
+exports.categoryById = function(req, res, next, id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            message: 'Category is invalid'
+        });
+    }
+    Category.findById(id).exec(function(err, category) {
+        if (err) return next(err);
+        if (!category) {
+            return res.status(404).send({
+                message: 'Category not found'
+            });
+        }
+        req.category = category;
+        next();
     });
 };
