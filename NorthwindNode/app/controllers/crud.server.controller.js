@@ -13,8 +13,11 @@ module.exports = function(modelName, sortBy) {
     return {
         create: function(req, res) {
             var model = new Model(req.body);
+            console.log(model);
             model.save(function(err) {
                 if (err) {
+                    console.log(err);
+                    console.log('why');
                     return res.status(400).send({
                         message: errorHandler.getErrorMessage(err)
                     });
@@ -32,7 +35,7 @@ module.exports = function(modelName, sortBy) {
             model.save(function(err) {
                 if (err) {
                     return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err);
+                        message: errorHandler.getErrorMessage(err)
                     });
                 }
                 else
@@ -44,7 +47,7 @@ module.exports = function(modelName, sortBy) {
             model.remove(function(err) {
                 if (err) {
                     return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err);
+                        message: errorHandler.getErrorMessage(err)
                     });
                 }
                 else
@@ -61,7 +64,7 @@ module.exports = function(modelName, sortBy) {
             Model.find(query).sort(sortBy).exec(function(err, models){
                 if (err) {
                     return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err);
+                        message: errorHandler.getErrorMessage(err)
                     });
                 }
             	else
@@ -87,5 +90,5 @@ module.exports = function(modelName, sortBy) {
                 next();
             });
         }
-    }
-}
+    };
+};
