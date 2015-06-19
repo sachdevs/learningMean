@@ -4,39 +4,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+	errorHandler = require('./errors.server.controller'),
     _ = require('lodash');
 
-/**
- * Create a Product
- */
-exports.create = function(req, res) {
+var crud = require('./crud.server.controller')('Product', 'name');
 
-};
-
-/**
- * Show the current Product
- */
-exports.read = function(req, res) {
-
-};
-
-/**
- * Update a Product
- */
-exports.update = function(req, res) {
-
-};
-
-/**
- * Delete an Product
- */
-exports.delete = function(req, res) {
-
-};
-
-/**
- * List of Products
- */
-exports.list = function(req, res) {
-
-};
+module.exports = crud;
